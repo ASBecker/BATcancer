@@ -1,0 +1,192 @@
+---
+title: "BATcancer Analysis"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Cross-sectional analysis
+
+```{r cross-sectional analysis}
+source('../Analysis/prep.R')
+install_load('plyr', 'ggplot2'); detach(package:plyr)
+
+d.activebat <- d.brownfat2 %>% group_by(Pat.ID) %>% slice(which.max(BAT)) %>% filter(BAT>0) %>% ungroup()
+d.inactive <- d.brownfat2 %>% filter(!Pat.ID %in% d.activebat$Pat.ID) %>% group_by(Pat.ID) %>% slice(which.min(Day)) %>% ungroup()
+
+t.test(d.activebat$Age, d.inactive$Age)
+t.test(d.activebat$BMI, d.inactive$BMI)
+t.test(d.activebat$mean7dtemp, d.inactive$mean7dtemp)
+
+chisq.test(matrix(c(nrow(d.activebat[which(d.activebat$Sex=='F'),]), nrow(d.activebat[which(d.activebat$Sex=='M'),]), 	
+                    nrow(d.inactive[which(d.inactive$Sex=='F'),]), nrow(d.inactive[which(d.inactive$Sex=='M'),])),	
+                  nrow = 2,	
+                  dimnames = list(BMI = c('F', 'M'),	
+                                  Cohort = c('BAT+', 'BAT-'))))
+
+d.inactive$Cachexy <- as.factor((d.inactive$BMI>18.5)*1)	
+d.inactive$Cachexy <- plyr::revalue(d.inactive$Cachexy, c('0'='<18.5', '1'='>18.5'))	
+ggplot(d.inactive, aes(BMI, fill=Cachexy)) + 	
+  geom_histogram(color="black", binwidth=1/3) +	
+  theme(legend.title=element_blank())
+
+d.activebat$Cachexy <- as.factor((d.activebat$BMI>18.5)*1)	
+d.activebat$Cachexy <- plyr::revalue(d.activebat$Cachexy, c('0'='<18.5', '1'='>18.5'))	
+ggplot(d.activebat, aes(BMI, fill=Cachexy)) + 	
+  geom_histogram(color="black", binwidth=1/3) +	
+  theme(legend.title=element_blank())	
+
+CACH <- matrix(c(nrow(d.activebat[which(d.activebat$BMI<18.5),]), nrow(d.activebat[which(d.activebat$BMI>18.5),]), 	
+                 nrow(d.inactive[which(d.inactive$BMI<18.5),]), nrow(d.inactive[which(d.inactive$BMI>18.5),])),	
+               nrow = 2,	
+               dimnames = list(BMI = c('<18.5', '>18.5'),	
+                               Cohort = c('BAT+', 'BAT-')))	
+
+
+chisq.test(CACH)
+```
+
+## Correlation testing (longitudinal)
+
+```{r correlation testing}
+source('../Analysis/prep.R')
+source('../Analysis/rhotable_fun.R')
+library(knitr)
+
+
+# PET-Grading / Histology -------------------------------------------------
+
+d.histo.svm %<>% mutate(path.stadium=factor(`Final Stadium`, ordered=TRUE))
+cor.test(as.numeric(d.histo.svm$path.stadium), d.histo.svm$auto_cancerstage, method='spearman')
+cor.test(as.numeric(d.histo.svm$path.stadium), d.histo.svm$cancerstage, method='spearman')
+
+
+# Longitudinal Analysis ---------------------------------------------------
+
+my_data_sel %<>% arrange(Pat.ID, Day)
+
+ix <- my_data_sel %>% ungroup() %>% mutate(rownr=row_number()) %>% group_by(Pat.ID) %>% 
+  slice(which.min(abs(Day.diff-best_median))) %>% .$rownr
+
+patient_table <- my_data_sel[c(ix, (ix-1)),] %>% 
+  group_by(Pat.ID) %>% arrange(Pat.ID, Day) %>% 
+  mutate(BMI_diff=BMI-lag(BMI),
+         BAT_diff=BAT-lag(BAT),
+         Cancer_diff=Cancer-lag(Cancer),
+         temp_diff=mean7dtemp-lag(mean7dtemp)) 
+patient_table %<>% .[seq(2,nrow(patient_table), by=2),] %>%
+  as.data.frame() 
+
+rhotable <- f.rhotable(patient_table)
+
+kable(rhotable)
+
+# Subgroup Analysis aka Fishing Expedition --------------------------------
+
+select_cancers <- list('C43','C34',c('C16','C15','C25'),c('C01','C04','C09','C10'))	
+
+f.caloop <- function(x, cachexia=FALSE) {	
+  cat('Cancer: ', x %>% unlist())	
+  subgroup <- d.brownfat2 %>% filter(ICD.10 %in% x) %>% .$Pat.ID	
+  if (cachexia==TRUE) {
+    f.rhotable(patient_table %>% filter(Pat.ID %in% subgroup & BMI<18.5))
+  } else {  
+    f.rhotable(patient_table %>% filter(Pat.ID %in% subgroup))	
+  }
+}	
+
+rhotable_all_select <- f.caloop(select_cancers)	
+
+lapply(select_cancers, f.caloop)	
+
+rhotable_loss <- f.rhotable(patient_table %>% filter(BMI_diff<0))
+
+```
+
+## Mixed linear model
+
+```{r lmm}
+source('../Analysis/prep.R')
+
+install_load('lme4', 'sjPlot')
+
+lme.bat <- lmer(BAT~Cancer+BMI+Sex+Age+mean7dtemp+(1|Pat.ID), data=d.brownfat2)
+tab_model(lme.bat)
+
+lme.batbmi <- lmer(BAT*BMI~Cancer+Sex+Age+mean7dtemp+(1|Pat.ID), data=d.brownfat2)
+tab_model(lme.batbmi)
+
+lme.bat.svm <- lmer(BAT~auto_cancerstage+BMI+Sex+Age+mean7dtemp+(1|Pat.ID), data=d.brownfat2)
+tab_model(lme.bat.svm)
+
+lme.batbmi.svm <- lmer(BAT*BMI~auto_cancerstage+Sex+Age+mean7dtemp+(1|Pat.ID), data=d.brownfat2)
+tab_model(lme.batbmi.svm)
+
+```
+
+## ICD-10
+
+```{r ICD.10}
+source('../Analysis/xsect.R')
+source('../Analysis/icd10_functions.R')
+
+d.acticd <- left_join(d.activebat, icd_table, by='Pat.ID')
+d.inacticd <- left_join(d.inactive, icd_table, by='Pat.ID')
+d.allicd <- rbind(d.acticd, d.inacticd)
+
+f.stackICDbar_large(d.acticd,25,title='ICD10 BAT+')	
+
+f.stackICDbar_large(d.inacticd,25,title='ICD10 Top23, BAT-')
+
+# Table with all ICD-10
+f.icdtable() #%>% knitr::kable()
+
+#options(max.print= 4000)
+glm(BAT~ICD_10*Sex+Age+BMI+mean7dtemp, data=d.allicd) %>% summary() %>% print()
+
+```
+
+## Causal inference
+
+```{r causal_inference}
+library(pcalg)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("graph", "RBGL", "Rgraphviz"))
+
+cm <- patient_table %>%
+  select(ends_with("diff") & !starts_with("Day")) %>%
+  as.matrix()
+
+suffStat <- list(C = cor(cm), n = nrow(cm))
+varNames <- c("BMI", "BAT", "Cancer", "Temperature")
+
+pc_bat <- pc(suffStat, indepTest = gaussCItest,
+             labels = varNames, alpha = 0.1)
+plot(pc_bat)
+
+
+cm_loss <- patient_table %>%
+  filter((Cancer_diff >= 0 & BMI_diff < 0)) %>%
+  select(ends_with("diff") & !starts_with("Day")) %>%
+  as.matrix()
+
+suffStat_loss <- list(C = cor(cm_loss), n = nrow(cm_loss))
+
+pc_bat_loss <- pc(suffStat_loss, indepTest = gaussCItest,
+             labels = varNames, alpha = 0.1)
+plot(pc_bat_loss)
+
+cm_cor <- patient_table %>%
+  filter((Cancer_diff >= 0 & BMI_diff < 0)|(Cancer_diff <= 0 & BMI_diff > 0)) %>%
+  select(ends_with("diff") & !starts_with("Day")) %>%
+  as.matrix()
+
+suffStat_cor <- list(C = cor(cm_cor), n = nrow(cm_cor))
+
+pc_bat_cor <- pc(suffStat_cor, indepTest = gaussCItest,
+             labels = varNames, alpha = 0.01)
+plot(pc_bat_cor)
+
+```
+
