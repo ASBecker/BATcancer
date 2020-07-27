@@ -3,8 +3,8 @@ if (!require('install.load')) install.packages('install.load')
 install.load::install_load('dplyr', 'purrr','zoo', 
              'magrittr', 'readr', 'stringr')
 
-d.brownfat <- read_csv('../Data/anon_brownfat.csv')
-d.histo.svm <- read_csv('../Data/anon_svm_histo.csv')
+d.brownfat <- read_csv('Data/anon_brownfat.csv')
+d.histo.svm <- read_csv('Data/anon_svm_histo.csv')
 
 canc_pid <- d.brownfat %>% filter(str_detect(ICD.10, '^C')) %>% distinct(Pat.ID) %>% .$Pat.ID
 d.brownfat2 <- d.brownfat %>% filter(Pat.ID %in% canc_pid)
