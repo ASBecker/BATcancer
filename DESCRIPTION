@@ -1,0 +1,30 @@
+Type: Compendium
+Package: Brown Fat Does Not Cause Cachexia in Cancer
+    Patients
+Title: Companion Analysis
+Version: 0.0.1
+Authors@R: c(
+    person(given = "Anton",
+           family = "Becker",
+           role = c("aut", "cre"),
+           email = "anton.becker@usz.ch"),
+    person(given = "Lukas",
+           family = "Frick",
+           role = "ctb",
+           email = "lukas.frick@usz.ch"))
+Description: Interactive, reproducible companion analysis for
+    large retrospective longitudinal cohort study examining whether brown
+    adipose tissue has a role in cancer cachexia.
+License: BSD 3-clause license
+Depends: 
+    BiocManager,
+    dplyr,
+    graph,
+    install.load,
+    knitr,
+    plyr,
+    RBGL,
+    Rgraphviz,
+    rmarkdown
+Encoding: UTF-8
+LazyData: true

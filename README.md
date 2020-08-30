@@ -1,5 +1,9 @@
 # Paper Repository: Brown Fat Does Not Cause Cachexia in Cancer Patients
 
+  <!-- badges: start -->
+  [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ASBecker/BATcancer/master?urlpath=rstudio)
+  <!-- badges: end -->
+
 by
 Anton S. Becker, M.D., Ph.D.<sup>1,2,3</sup>, 
 Caroline Zellweger, M.D.<sup>3</sup>, 
@@ -73,12 +77,19 @@ or [download a zip archive](https://github.com/ASBecker/BATcancer/archive/master
 
 You'll need a working R environment to run the code.
 The recommended version is R 4.0.0, together with the latest version of RStudio.
-The required dependencies will be installed automatically when running `prep.R` and/or `R_notebook.Rmd` for the first time using the `install.load` package.
+The required dependencies will be installed automatically when running `prep.R` 
+and/or `R_notebook.Rmd` for the first time using the `install.load` package.
 
 
 ## Reproducing the results
 
-Knitting `Presentation/R_notebook.Rmd` will yield a html file containing the main results of the analysis, running the chunks in RStudio allows for access to the data and additional inspection/analysis.
+Knitting `Presentation/R_notebook.Rmd` will yield a html file containing the main results 
+of the analysis, running the chunks in RStudio allows for access to the data and additional 
+inspection/analysis.
+
+Alternatively, you can click on the [Binder badge](https://mybinder.org/v2/gh/ASBecker/BATcancer/master?urlpath=rstudio) 
+at the top of this page and run the analysis in an online instance of RStudio server.
+This analysis is powered by the [holepunch package](https://github.com/karthik/holepunch).
 
 
 ## License
@@ -87,6 +98,5 @@ All source code is made available under a BSD 3-clause license. You can freely
 use and modify the code, without warranty, so long as you provide attribution
 to the authors. See `LICENSE.md` for the full license text.
 
-The manuscript text is not open source. The authors reserve the rights to the
-article content, which is currently submitted for publication in the
+The manuscript text is currently under review for publication in the journal
 PLOS ONE.
