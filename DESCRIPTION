@@ -19,12 +19,13 @@ License: BSD 3-clause license
 Depends: 
     BiocManager,
     dplyr,
-    graph,
     install.load,
     knitr,
     plyr,
-    RBGL,
-    Rgraphviz,
     rmarkdown
+Suggests:
+    graph,
+    RBGL,
+    Rgraphviz
 Encoding: UTF-8
 LazyData: true
