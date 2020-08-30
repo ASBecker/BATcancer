@@ -2,7 +2,7 @@ Type: Compendium
 Package: Brown Fat Does Not Cause Cachexia in Cancer
     Patients
 Title: Companion Analysis
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person(given = "Anton",
            family = "Becker",
@@ -22,8 +22,11 @@ Depends:
     install.load,
     knitr,
     plyr,
-    rmarkdown
+    rmarkdown,
+    lme4, 
+    sjPlot
 Suggests:
+    pcalg,
     graph,
     RBGL,
     Rgraphviz
