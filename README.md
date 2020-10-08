@@ -1,4 +1,4 @@
-# Paper Repository: Brown Fat Does Not Cause Cachexia in Cancer Patients
+# Paper Repository: Brown Fat Does Not Cause Cachexia in Cancer Patients <img src="Presentation/hex_batcanc.png" align="right" alt="" width="120" />
 
   <!-- badges: start -->
   [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ASBecker/BATcancer/master?urlpath=rstudio)
@@ -29,7 +29,7 @@ Irene A. Burger, M.D.<sup>†3</sup>
 > 5.	Division of Controlling and Data Management, UniversityHospital Zurich
 
 
-This paper has been submitted for publication in *PLOS ONE* and is available on bioRxiv.
+This paper has been published in [PLOS ONE](https://doi.org/10.1371/journal.pone.0239990).
 
 > In this large retrospective longitudinal cohort study, we examined whether brown adipose tissue (BAT)
 > has a role in cancer cachexia. We found that there is no association between Cancer, BAT and weight loss.
@@ -60,7 +60,7 @@ Our data did not confirm the hypothesis that BAT plays a major role in cancer-me
 
 ## Software implementation
 
-The analysis was run in R 4.0.0. We also recommend using the latest version of RStudio.
+The analysis was run in R 4.0.2. We also recommend using the latest version of RStudio.
 
 
 ## Getting the code
@@ -87,8 +87,8 @@ Knitting `Presentation/R_notebook.Rmd` will yield a html file containing the mai
 of the analysis, running the chunks in RStudio allows for access to the data and additional 
 inspection/analysis.
 
-Alternatively, you can click on the [Binder badge](https://mybinder.org/v2/gh/ASBecker/BATcancer/master?urlpath=rstudio) 
-at the top of this page and run the analysis in an online instance of RStudio server.
+Alternatively, you can run the analysis on [Binder](https://mybinder.org/v2/gh/ASBecker/BATcancer/master?urlpath=rstudio) 
+in an online instance of RStudio server.
 This analysis is powered by the [holepunch package](https://github.com/karthik/holepunch).
 
 
@@ -97,6 +97,3 @@ This analysis is powered by the [holepunch package](https://github.com/karthik/h
 All source code is made available under a BSD 3-clause license. You can freely
 use and modify the code, without warranty, so long as you provide attribution
 to the authors. See `LICENSE.md` for the full license text.
-
-The manuscript text is currently under review for publication in the journal
-PLOS ONE.
