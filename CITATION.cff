@@ -1,0 +1,55 @@
+cff-version: 1.2.0
+message: "If you use (parts of) this analysis or data, please cite it as below."
+authors:
+- family-names: "Becker"
+  given-names: "Anton S."
+  orcid: "https://orcid.org/0000-0001-8372-6496"
+- family-names: "Frick"
+  given-names: "Lukas"
+- family-names: "Opitz"
+  given-names: "Lennart"
+title: "BATcancer repository"
+version: 1.1
+doi: 10.5281/zenodo.5567072
+date-released: 2020-07-26
+url: "https://github.com/ASBecker/BATcancer"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Becker"
+    given-names: "Anton S."
+    orcid: "https://orcid.org/0000-0001-8372-6496"
+  - family-names: "Zellweger"
+    given-names: "Caroline"
+  - family-names: "Bacanovic"
+    given-names: "Sara"
+  - family-names: "Franckenberg"
+    given-names: "Sabine"
+    orcid: "http://orcid.org/0000-0002-8326-0777"
+  - family-names: "Nagel"
+    given-names: "Hannes W."
+  - family-names: "Frick"
+    given-names: "Lukas"
+  - family-names: "Schawkat"
+    given-names: "Khoschy"
+  - family-names: "Eberhard"
+    given-names: "Matthias"
+  - family-names: "Blüthgen"
+    given-names: "Christian"
+    orcid: "http://orcid.org/0000-0001-7321-5676"
+  - family-names: "Volbracht"
+    given-names: "Jörk"
+  - family-names: "Moos"
+    given-names: "Rudolf"
+  - family-names: "Wolfrum"
+    given-names: "Christian"
+  - family-names: "Burger"
+    given-names: "Irene A."
+    orcid: "http://orcid.org/0000-0001-8029-8692"
+  doi: "10.1371/journal.pone.0239990"
+  journal: "PLoS ONE"
+  month: 10
+  title: "Brown fat does not cause cachexia in cancer patients: A large retrospective longitudinal FDG-PET/CT cohort study"
+  issue: 10
+  volume: 15
+  year: 2020
